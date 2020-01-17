@@ -67,7 +67,7 @@ const calculateScore = frames => {
                 //if the next throw exists, add that
                 if (nextThrow) {
                     frame.bonusTotal += nextThrow === "X" ? 10 : parseInt(nextThrow)
-                    //otherwise, add the first throw of the next frame
+                //otherwise, add the first throw of the next frame
                 } else {
                     nextFrameFirstThrow = framesObjectArray[parseInt(i) + 1].throws[0]
                     frame.bonusTotal += nextFrameFirstThrow === "X" ? 10 : parseInt(nextFrameFirstThrow)
@@ -78,14 +78,15 @@ const calculateScore = frames => {
     //total up the in frame total and bonus total of each frame to get total score for the game
     framesObjectArray.forEach(frame => totalScore += frame.inFrameTotal + frame.bonusTotal)
 
-    $("#arrayDisplay").val(JSON.stringify(framesObjectArray, true, 2))
-
+    console.log(framesObjectArray)
+    
     return totalScore
 }
 
 $("#sequence").val(scoreSequence)
 
 $("#scoreDisplay").html(calculateScore(scoreSequence))
+
 
 if (!scoreSequence)
     $('<p class="text-muted" />').html("The calculated total score for the game will be displayed here when you submit the card above.")
