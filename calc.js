@@ -14,10 +14,10 @@ const calculateScore = frames => {
             bonusTotal: 0
         }))
 
-    //find total for each frame
+    //for each frame
     for (let i in framesObjectArray) {
         let frame = framesObjectArray[i]
-        //for each throw
+        //for each throw in the frame
         for (let j in frame.throws) {
             switch(frame.throws[j]){
                 //if the throw is a strike
@@ -25,11 +25,11 @@ const calculateScore = frames => {
                     //add 10
                     frame.inFrameTotal += 10
 
-                    //if it's not the tenth frame, add bonus points
+                    //if it's not the tenth frame
                     if (i != 9 ){
                         const nextFrameThrows = framesObjectArray[parseInt(i) + 1].throws
 
-                        //if the next frame has only one throw, it is a strike, add that and the following throw
+                        //if the next frame has only one throw, it is a strike, add that and the following frame's first throw
                         if (nextFrameThrows.length === 1) {
                             frame.bonusTotal += 10
 
@@ -41,12 +41,15 @@ const calculateScore = frames => {
                             const firstTwoThrows = nextFrameThrows.slice(0, 2)
 
                             firstTwoThrows.forEach(throwScore => {
-                                if (throwScore === "X") {
-                                    frame.bonusTotal += 10
-                                } else if (throwScore === "/") {
-                                    // if one is a spare, add the difference between 10 and the previous throw
-                                    frame.bonusTotal += 10 - parseInt(firstTwoThrows[0])
-                                } else {
+                                switch(throwScore) {
+                                    case 'X':
+                                        frame.bonusTotal += 10
+                                        break
+                                    case '/':
+                                        // if one is a spare, add the difference between 10 and the previous throw
+                                        frame.bonusTotal += 10 - parseInt(firstTwoThrows[0])
+                                        break
+                                    default: 
                                     frame.bonusTotal += parseInt(throwScore)
                                 }
                             })
@@ -57,17 +60,11 @@ const calculateScore = frames => {
                     //if its a spare, add the difference between 10 and the previous throw
                     frame.inFrameTotal += 10 - parseInt(frame.throws[parseInt(j) - 1])
 
+                    //if it's not the tenth frame
                     if (i != 9){
-
-                        const nextThrow = frame.throws[parseInt(j) + 1]
-                        //if the next throw exists, add that
-                        if (nextThrow) {
-                            frame.bonusTotal += nextThrow === "X" ? 10 : parseInt(nextThrow)
-                        //otherwise, add the first throw of the next frame
-                        } else {
-                            nextFrameFirstThrow = framesObjectArray[parseInt(i) + 1].throws[0]
-                            frame.bonusTotal += nextFrameFirstThrow === "X" ? 10 : parseInt(nextFrameFirstThrow)
-                        }
+                        //add the value of the next frame's first throw
+                        nextFrameFirstThrow = framesObjectArray[parseInt(i) + 1].throws[0]
+                        frame.bonusTotal += nextFrameFirstThrow === "X" ? 10 : parseInt(nextFrameFirstThrow)
                     }
                     break
                 default:
@@ -76,9 +73,8 @@ const calculateScore = frames => {
             }
         }
     }
-
     //debugging: console.log(framesObjectArray)
-    console.log(framesObjectArray)
+
     //total up the in-frame total and bonus total of each frame to get total score for the game
     return framesObjectArray.map(frame => frame.inFrameTotal + frame.bonusTotal).reduce((a, b) => a + b )
 }
