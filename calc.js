@@ -81,4 +81,18 @@ const calculateScore = frames => {
 
 $("#sequence").val(scoreSequence)
 
-$("#scoreDisplay").html(calculateScore(scoreSequence))
+const totalScore = calculateScore(scoreSequence)
+
+$("#scoreDisplay").html(totalScore)
+
+$('#scoreDisplay').addClass( totalScore > 299 && "text-danger" )
+
+//tests
+console.log(
+    calculateScore( 'X-X-X-X-X-X-X-X-X-XXX' ) === 300 ,
+    calculateScore( '45-54-36-27-09-63-81-18-90-72' ) === 90 ,
+    calculateScore( '5/-5/-5/-5/-5/-5/-5/-5/-5/-5/5' ) === 150 ,
+    calculateScore( '8/-54-90-X-X-5/-53-63-9/-9/X' ) === 149 ,
+    calculateScore( '14-45-6/-5/-X-01-7/-6/-X-2/6' ) === 133 ,
+    calculateScore( '9/-0/-X-X-62-7/-8/-X-90-9/X' ) === 168 ,
+    calculateScore( '9/-0/-X-X-62-7/-8/-X-90-X9/' ) === 168 )
